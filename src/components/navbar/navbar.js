@@ -8,18 +8,23 @@ import { GithubIcon } from '../icons/GithubIcon.tsx'
 import { SunIcon } from './SunIcon';
 import { MoonIcon } from './MoonIcon';
 import useDarkMode from 'use-dark-mode';
-
+import { Link as ReactLink } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const Nav = () => {
 
     const darkMode = useDarkMode(false);
+    const navigate = useNavigate();
+
 
 
     const collapseItems = [
-        "Home",
-        "About",
-        "Services",
-        "Dashboard"
+        { name: "Home", link: "/" },
+        { name: "About", link: "/" },
+        { name: "Services", link: "/" },
+        { name: "Dashboard", link: "/dashboard" }
+
+
     ];
     return (
         <Navbar
@@ -29,8 +34,8 @@ export const Nav = () => {
 
         >
             <Navbar.Toggle showIn="xs" />
-            <Navbar.Brand 
-               
+            <Navbar.Brand
+
             >
                 <AcmeLogo />
                 <Text b color="inherit">
@@ -43,10 +48,10 @@ export const Nav = () => {
                 hideIn="xs"
                 variant="highlight-rounded"
             >
-                <Navbar.Link isActive href="#">Home</Navbar.Link>
-                <Navbar.Link href="#">About</Navbar.Link>
-                <Navbar.Link href="#">Services</Navbar.Link>
-                <Navbar.Link href="#">Dashboard</Navbar.Link>
+                <Navbar.Link onPress={() => { navigate("/") }}  >Home</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/about")} >About</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/")} >Services</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/dashboard")} >Dashboard</Navbar.Link>
             </Navbar.Content>
 
             <Navbar.Collapse >
@@ -57,9 +62,11 @@ export const Nav = () => {
                             css={{
                                 minWidth: '100%',
                             }}
-                            href="#"
+
+                            onPress={() => navigate(item.link)}
                         >
-                            {item}
+                            
+                            {item.name}
                         </Link>
                     </Navbar.CollapseItem>
                 ))}

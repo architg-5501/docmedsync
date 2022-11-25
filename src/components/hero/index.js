@@ -7,6 +7,8 @@ import { Flex } from '../styles/flex';
 import NET from 'vanta/dist/vanta.net.min'
 import useDarkMode from 'use-dark-mode';
 import randomColor from "randomcolor";
+import FPSStats from "react-fps-stats";
+
 export const Hero = () => {
     const darkMode = useDarkMode(false);
     const [vantaEffect, setVantaEffect] = useState(null)
@@ -55,8 +57,7 @@ export const Hero = () => {
             <Box ref={myRef}
                
             >
-              
-
+               
                 <Flex
 
 
@@ -77,7 +78,7 @@ export const Hero = () => {
                     justify={'center'}
 
                 >
-                    <Box
+                    <Box 
                         css={{
                             pt: '$13',
 
@@ -87,7 +88,7 @@ export const Hero = () => {
 
                         }}
                     >
-                        <Box
+                        <Box 
                             css={{
                                 maxWidth: '600px',
                             }}
