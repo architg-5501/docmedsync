@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { getWeb3 } from "../../../utils.js";
 import Docmedsync from "../../../contracts/Docmedsync.json";
 import { Input, Button, Text } from "@nextui-org/react";
-
 import Loading from '../../../components/Loading/Loading';
 import { useNavigate } from 'react-router-dom';
+import useDarkMode from 'use-dark-mode';
+
+import { message, ConfigProvider, theme } from 'antd';
 
 const Owner = () => {
-
+    const [messageApi, contextHolder] = message.useMessage();
     const [web3, setWeb3] = useState(undefined);
     const [accounts, setAccounts] = useState(undefined);
     const [contract, setContract] = useState(undefined);
@@ -16,6 +18,7 @@ const Owner = () => {
     const [addAdmin, setAddAdmin] = useState("");
     const [removeAdmin, setRemoveAdmin] = useState("");
     const [transferOwnership, setTransferOwnership] = useState("");
+    const darkMode = useDarkMode(false);
 
     const isReady = () => {
         return (
@@ -59,12 +62,23 @@ const Owner = () => {
         e.preventDefault();
         try {
             console.log(addAdmin);
-            console.log("Adding...");
+
             await contract.methods.addAdmin(addAdmin.trim()).send({ from: accounts[0] });
-            console.log("Added!!!");
-            window.alert("Admin added successfully");
+
+            messageApi.open({
+                type: 'success',
+                content: <>Admin added successfully!</>,
+                duration: 5,
+            });
         } catch (error) {
-            window.alert("Admin could not be added. Make sure you are the Owner and check the entered Address");
+
+            messageApi.open({
+                type: 'error',
+                content: <> Admin could not be added. Make sure you are the Owner and check the entered Address.</>,
+                duration: 5,
+            });
+
+           
             console.error(error);
         }
         setAddAdmin("");
@@ -74,9 +88,20 @@ const Owner = () => {
         e.preventDefault();
         try {
             await contract.methods.removeAdmin(removeAdmin.trim()).send({ from: accounts[0] });
-            window.alert("Admin removed successfully");
+            messageApi.open({
+                type: 'success',
+                content: <>Admin removed successfully!</>,
+                duration: 5,
+            });
+            //window.alert("Admin removed successfully");
         } catch (error) {
-            window.alert("Admin could not be removed. Make sure you are the Owner and check the entered Address");
+            messageApi.open({
+                type: 'error',
+                content: <> Admin could not be removed. Make sure you are the Owner and check the entered Address.</>,
+                duration: 5,
+            });
+
+            //window.alert("Admin could not be removed. Make sure you are the Owner and check the entered Address");
             console.error(error);
         }
         setRemoveAdmin("");
@@ -87,9 +112,19 @@ const Owner = () => {
 
         try {
             await contract.methods.changeOwner(transferOwnership.trim()).send({ from: accounts[0] });
-            window.alert("Owner changed successfully");
+            messageApi.open({
+                type: 'success',
+                content: <>Owner changed successfully!</>,
+                duration: 5,
+            });
+            //window.alert("Owner changed successfully");
         } catch (error) {
-            window.alert("Ownership could not be transferred. Make sure you are the Owner and check the entered Address");
+            messageApi.open({
+                type: 'error',
+                content: <> Ownership could not be transferred. Make sure you are the Owner and check the entered Address.</>,
+                duration: 5,
+            });
+            //window.alert("Ownership could not be transferred. Make sure you are the Owner and check the entered Address");
             console.error(error);
         }
     }
@@ -100,11 +135,20 @@ const Owner = () => {
 
     return (
         <>
+            <ConfigProvider
+                theme={{
+                    algorithm: darkMode.value == false ? theme.defaultAlgorithm : theme.darkAlgorithm,
+
+                }}
+            >
+                {contextHolder}
+            </ConfigProvider>
+
             <section className="owner-dash-wrapper">
                 <div className="container" >
                     <div className="section-title" >
                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <Text h2>Owner's Dashboard</Text>
+                            <Text color="primary" h2>Owner's Dashboard</Text>
                             <Text >Various operations the owner can do.</Text>
 
                         </div>
@@ -117,30 +161,30 @@ const Owner = () => {
                             alignItems: "flex-start",
                             marginLeft: "10%",
                             marginTop: "4%",
-                            marginBottom:"2%"
+                            marginBottom: "2%"
                         }}>
-                        <Text h4 css={{marginBottom:"2rem"}}> Add new Admin</Text>
-                            <form onSubmit={AddAdmin}>
+                        <Text color="primary" h4 css={{ marginBottom: "2rem" }}> Add new Admin</Text>
+                        <form onSubmit={AddAdmin}>
 
-                                <div style={{ display: "flex", flexDirection: "row", justifyItems:"center",gap:"2rem" }}>
+                            <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
 
-                                    <Input
-                                        clearable
-                                        type="text"
-                                        bordered
-                                        labelPlaceholder="Admin's Address"
-                                        color="primary"
-                                        required={true}
-                                        width='400px'
-                                        value={addAdmin}
-                                        onChange={e => setAddAdmin(e.target.value)}
+                                <Input
+                                    clearable
+                                    type="text"
+                                    bordered
+                                    labelPlaceholder="Admin's Address"
+                                    color="primary"
+                                    required={true}
+                                    width='400px'
+                                    value={addAdmin}
+                                    onChange={e => setAddAdmin(e.target.value)}
 
-                                    />
-                                    <Button type='submit' shadow auto color="primary"  rounded>Click Here </Button>
-                                </div>
-                            </form>
+                                />
+                                <Button type='submit' shadow auto color="primary" rounded css={{zIndex:"$1"}}>Click Here </Button>
+                            </div>
+                        </form>
                     </div>
-                   
+
 
                     <div className="remove-admin"
                         style={{
@@ -149,28 +193,28 @@ const Owner = () => {
                             alignItems: "flex-start",
                             marginLeft: "10%",
                             marginTop: "4%",
-                            marginBottom:"2%"
+                            marginBottom: "2%"
                         }}>
-                        <Text h4 css={{marginBottom:"2rem"}}>Remove an Admin</Text>
-                            <form onSubmit={RemoveAdmin}>
+                        <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Remove an Admin</Text>
+                        <form onSubmit={RemoveAdmin}>
 
-                                <div style={{ display: "flex", flexDirection: "row", justifyItems:"center",gap:"2rem" }}>
+                            <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
 
-                                    <Input
-                                        clearable
-                                        type="text"
-                                        bordered
-                                        labelPlaceholder="Admin's Address"
-                                        color="primary"
-                                        required={true}
-                                        width='400px'
-                                        value={removeAdmin}
-                                        onChange={e => setRemoveAdmin(e.target.value)}
+                                <Input
+                                    clearable
+                                    type="text"
+                                    bordered
+                                    labelPlaceholder="Admin's Address"
+                                    color="primary"
+                                    required={true}
+                                    width='400px'
+                                    value={removeAdmin}
+                                    onChange={e => setRemoveAdmin(e.target.value)}
 
-                                    />
-                                    <Button type='submit'shadow  auto color="primary"  rounded>Click Here </Button>
-                                </div>
-                            </form>
+                                />
+                                <Button type='submit' shadow auto color="primary" rounded css={{zIndex:"$1"}}>Click Here </Button>
+                            </div>
+                        </form>
                     </div>
 
                     <div className="transfer-ownership"
@@ -180,33 +224,33 @@ const Owner = () => {
                             alignItems: "flex-start",
                             marginLeft: "10%",
                             marginTop: "4%",
-                            marginBottom:"2%"
+                            marginBottom: "2%"
                         }}>
-                        <Text h4 css={{marginBottom:"2rem"}}>Remove an Admin</Text>
-                            <form onSubmit={TransferOwnership}>
+                        <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Transfer Ownership</Text>
+                        <form onSubmit={TransferOwnership}>
 
-                                <div style={{ display: "flex", flexDirection: "row", justifyItems:"center",gap:"2rem" }}>
+                            <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
 
-                                    <Input
-                                        clearable
-                                        type="text"
-                                        bordered
-                                        labelPlaceholder="New Owner's Address"
-                                        color="primary"
-                                        required={true}
-                                        width='400px'
-                                        value={transferOwnership}
-                                        onChange={e => setTransferOwnership(e.target.value)}
+                                <Input
+                                    clearable
+                                    type="text"
+                                    bordered
+                                    labelPlaceholder="New Owner's Address"
+                                    color="primary"
+                                    required={true}
+                                    width='400px'
+                                    value={transferOwnership}
+                                    onChange={e => setTransferOwnership(e.target.value)}
 
-                                    />
-                                    <Button type='submit' shadow  auto color="primary"  rounded>Click Here </Button>
-                                </div>
-                            </form>
+                                />
+                                <Button type='submit' shadow auto color="primary" rounded css={{zIndex:"$1"}}>Click Here </Button>
+                            </div>
+                        </form>
                     </div>
 
-            
 
-                    
+
+
                 </div>
             </section>
         </>

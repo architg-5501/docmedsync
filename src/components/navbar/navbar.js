@@ -10,7 +10,7 @@ import { MoonIcon } from './MoonIcon';
 import useDarkMode from 'use-dark-mode';
 import { Link as ReactLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-
+import { useMatch } from 'react-router-dom';
 export const Nav = () => {
 
     const darkMode = useDarkMode(false);
@@ -20,8 +20,8 @@ export const Nav = () => {
 
     const collapseItems = [
         { name: "Home", link: "/" },
-        { name: "About", link: "/" },
-        { name: "Services", link: "/" },
+        { name: "About", link: "/about" },
+        { name: "Services", link: "/services" },
         { name: "Dashboard", link: "/dashboard" }
 
 
@@ -37,10 +37,12 @@ export const Nav = () => {
             <Navbar.Brand
 
             >
-                <AcmeLogo />
-                <Text b color="inherit">
-                    docmedsync
-                </Text>
+                <Link href='/' color="inherit">
+                    <AcmeLogo />
+                    <Text b color="inherit">
+                        docmedsync
+                    </Text>
+                </Link>
             </Navbar.Brand>
             <Navbar.Content
                 enableCursorHighlight
@@ -48,10 +50,10 @@ export const Nav = () => {
                 hideIn="xs"
                 variant="highlight-rounded"
             >
-                <Navbar.Link onPress={() => { navigate("/") }}  >Home</Navbar.Link>
-                <Navbar.Link onPress={() => navigate("/about")} >About</Navbar.Link>
-                <Navbar.Link onPress={() => navigate("/")} >Services</Navbar.Link>
-                <Navbar.Link onPress={() => navigate("/dashboard")} >Dashboard</Navbar.Link>
+                <Navbar.Link onPress={() => { navigate("/") }} isActive={useMatch("/")} >Home</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/about")} isActive={useMatch("/about")} >About</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/services")} isActive={useMatch("/services")} >Services</Navbar.Link>
+                <Navbar.Link onPress={() => navigate("/dashboard")} isActive={useMatch("/dashboard")} >Dashboard</Navbar.Link>
             </Navbar.Content>
 
             <Navbar.Collapse >
@@ -65,7 +67,7 @@ export const Nav = () => {
 
                             onPress={() => navigate(item.link)}
                         >
-                            
+
                             {item.name}
                         </Link>
                     </Navbar.CollapseItem>
@@ -92,7 +94,7 @@ export const Nav = () => {
                 </Navbar.CollapseItem>
             </Navbar.Collapse>
             <Navbar.Content>
-                <ModalLogin />
+                
 
 
                 <Navbar.Item hideIn={'xs'}>

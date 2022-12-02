@@ -12,7 +12,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@truffle/hdwallet-provider": "^1.7.0",
+    "antd": "^5.0.3",
     "bootstrap": "^5.2.3",
+    "buffer": "^6.0.3",
     "dayjs": "^1.11.5",
     "embla-carousel-react": "^7.0.3",
     "ipfs-http-client": "^54.0.2",
@@ -53,6 +55,15 @@
     ]
   },
   "devDependencies": {
+    "@iconify/icons-akar-icons": "^1.2.11",
+    "@iconify/icons-bi": "^1.2.13",
+    "@iconify/icons-eos-icons": "^1.2.4",
+    "@iconify/icons-fluent": "^1.2.18",
+    "@iconify/icons-healthicons": "^1.2.3",
+    "@iconify/icons-mdi": "^1.2.34",
+    "@iconify/icons-si-glyph": "^1.2.4",
+    "@iconify/icons-whh": "^1.2.3",
+    "@iconify/react": "^4.0.1",
     "autoprefixer": "^10.4.12",
     "postcss": "^8.4.17",
     "tailwindcss": "^3.1.8"

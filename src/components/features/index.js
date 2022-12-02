@@ -109,9 +109,7 @@ export const Features = () => {
                 </Flex>
             </Box>
 
-            <Divider
-                css={{ position: 'absolute', inset: '0p', left: '0', mt: '$5' }}
-            />
+            
         </>
     );
 };

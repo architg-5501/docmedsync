@@ -57,11 +57,7 @@
      // Useful for deploying to a public network.
      // NB: It's important to wrap the provider as a function.
  
-     development: {
-       
-       port: 9545,
-      
-     },
+ 
      goerli: {
        provider: () => {
          return new HDWalletProvider(secrets.mnemonic, `https://goerli.infura.io/v3/${secrets.projectId}`)
@@ -73,6 +69,11 @@
        skipDryRun: false
  
      },
+     development: {
+      host: 'localhost',
+      port: 8545,
+      network_id: '*' //* will match to any network id
+      }
      // Useful for private networks
      // private: {
      // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),

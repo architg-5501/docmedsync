@@ -8,9 +8,12 @@ import NET from 'vanta/dist/vanta.net.min'
 import useDarkMode from 'use-dark-mode';
 import randomColor from "randomcolor";
 import FPSStats from "react-fps-stats";
+import { useNavigate } from 'react-router-dom';
+
 
 export const Hero = () => {
     const darkMode = useDarkMode(false);
+    const history = useNavigate();
     const [vantaEffect, setVantaEffect] = useState(null)
     const myRef = useRef(null)
     useEffect(() => {
@@ -145,11 +148,13 @@ export const Hero = () => {
                                 shadow color="primary" auto
                                 css={{ zIndex: '$1' }}
                                 onPress={() => {
-                                    console.log("pressed")
+                                    
                                     if (vantaEffect) {
                                         vantaEffect.setOptions({ color: randomColor() })
                                         vantaEffect.resize()
                                     }
+
+                                    history("/dashboard")
 
 
                                 }} >Get Started</Button>

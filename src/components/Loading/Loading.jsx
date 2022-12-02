@@ -1,12 +1,11 @@
 import React from 'react'
 import "./Loading.css";
+import { Loading as Loader } from "@nextui-org/react";
 
 const Loading = () => {
     return (
         <div className="loading-wrapper">
-            <div className="spinner-border text-primary spinner" role="status">
-                <span className="sr-only"></span>
-            </div>
+             <Loader  size="lg"  type="gradient">Loading</Loader>
         </div>
     )
 }
