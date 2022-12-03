@@ -6,7 +6,8 @@ import Docmedsync from "../../../contracts/Docmedsync.json";
 import Loading from '../../../components/Loading/Loading';
 import { useNavigate } from 'react-router-dom';
 import { Input, Button, Text } from "@nextui-org/react";
-
+import { message, ConfigProvider, theme } from 'antd';
+import useDarkMode from 'use-dark-mode';
 
 const PatientDashboard = () => {
 
@@ -22,6 +23,9 @@ const PatientDashboard = () => {
     const [addAuthAddress, setAddAuthAddress] = useState("");
     const [removeAuthId, setRemoveAuthId] = useState("");
     const [removeAuthAddress, setRemoveAuthAddress] = useState("");
+
+    const darkMode = useDarkMode(false);
+    const [messageApi, contextHolder] = message.useMessage();
 
     const isReady = () => {
         return (
@@ -63,10 +67,22 @@ const PatientDashboard = () => {
     const getPatient = async (e) => {
         e.preventDefault();
         try {
+            messageApi.open({
+                key: "1",
+                type: 'loading',
+                content: 'Loading Data...',
+                duration: 0,
+            });
             const pat = await contract.methods.getPatientDetails(yourId).call({ from: accounts[0] });
             setPatient(pat);
         } catch (err) {
-            window.alert("Could not get details of patient. Please make sure you have the correct rights and you have the correct Id")
+            messageApi.open({
+                key:"1",
+                type: 'error',
+                content: <>Could not get details of patient. Please make sure you have the correct rights and you have the correct Id</>,
+                duration: 5,
+            });
+            //window.alert("Could not get details of patient. Please make sure you have the correct rights and you have the correct Id")
         }
         setYourId("");
     }
@@ -148,6 +164,14 @@ const PatientDashboard = () => {
 
     return (
         <>
+            <ConfigProvider
+                theme={{
+                    algorithm: darkMode.value == false ? theme.defaultAlgorithm : theme.darkAlgorithm,
+
+                }}
+            >
+                {contextHolder}
+            </ConfigProvider>
             <section className="patient-dash-wrapper" >
                 <div className="container">
                     <div className="section-title">
@@ -171,7 +195,7 @@ const PatientDashboard = () => {
                     >
 
                         <div >
-                            <Text h4 css={{ marginBottom: "2rem" }}>Get your Details</Text>
+                            <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Get your Details</Text>
                             <form onSubmit={getPatient}>
 
                                 <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
@@ -190,7 +214,7 @@ const PatientDashboard = () => {
                                     />
 
 
-                                    <Button type='submit' shadow auto color="primary" css={{ zIndex:"1" }} rounded  >Click Here</Button>
+                                    <Button type='submit' shadow auto color="primary" css={{ zIndex: "1" }} rounded  >Click Here</Button>
                                 </div>
 
                             </form>
@@ -201,7 +225,7 @@ const PatientDashboard = () => {
 
 
                         <div className="get-records">
-                            <Text h4 css={{ marginBottom: "2rem" }}>Get your Records</Text>
+                            <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Get your Records</Text>
                             <div>
                                 <form onSubmit={getRecords}>
                                     <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
@@ -233,104 +257,113 @@ const PatientDashboard = () => {
                             </div>
                         </div>
                         <div className="give-authorization">
-                            <Text h4 css={{ marginBottom: "2rem" }}>Give Authorization</Text>
-                            <div>
-                                <form onSubmit={handleAddAuthAddress}>
-                                    <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                            <Text color="primary" h4 css={{ marginBottom: "2rem" }}>Give Authorization</Text>
+                            <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                                <div>
+                                    <form onSubmit={handleAddAuthAddress}>
+                                        <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
 
-                                        <Input
-                                            clearable
-                                            type="text"
-                                            bordered
-                                            labelPlaceholder="Organization's Address"
-                                            color="primary"
-                                            required={true}
-                                            width="25rem"
-                                            value={addAuthAddress}
-                                            onChange={e => setAddAuthAddress(e.target.value)}
+                                            <Input
+                                                clearable
+                                                type="text"
+                                                bordered
+                                                labelPlaceholder="Organization's Address"
+                                                color="primary"
+                                                required={true}
+                                                width="25rem"
+                                                value={addAuthAddress}
+                                                onChange={e => setAddAuthAddress(e.target.value)}
 
-                                        />
+                                            />
 
-                                        <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }} >Click Here  </Button>
-                                    </div>
+                                            <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }} >Click Here  </Button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div><Text h4 css={{}}>OR</Text></div>
+                                <div>
+                                    <form onSubmit={handleAddAuthId}>
+                                        <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                                            <Input
+                                                clearable
+                                                type="text"
+                                                bordered
+                                                labelPlaceholder="Organization's Id"
+                                                color="primary"
+                                                required={true}
+                                                width="25rem"
+                                                value={addAuthId}
+                                                onChange={e => setAddAuthId(e.target.value)}
 
-                                    <Text h4 css={{ marginBottom: "2rem", marginTop: "2rem" }}>OR</Text>
-                                    <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
-                                        <Input
-                                            clearable
-                                            type="text"
-                                            bordered
-                                            labelPlaceholder="Organization's Id"
-                                            color="primary"
-                                            required={true}
-                                            width="25rem"
-                                            value={addAuthId}
-                                            onChange={e => setAddAuthId(e.target.value)}
+                                            />
 
-                                        />
+                                            <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }} >Click Here  </Button>
 
-                                        <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }} >Click Here  </Button>
-
-                                    </div>
+                                        </div>
 
 
-                                </form>
+                                    </form>
+
+                                </div>
+
                             </div>
                         </div>
-                        <div className="remove-authorization">
-                            <Text h4 css={{ marginBottom: "2rem" }}>Remove Authorization</Text>
-                            <div>
-                                <form onSubmit={handleRemoveAuthAddress}>
-                                    <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                        <div className="remove-authorization" >
+                            <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Remove Authorization</Text>
+                            <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                                <div >
+                                    <form onSubmit={handleRemoveAuthAddress}>
+                                        <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
 
-                                        <Input
-                                            clearable
-                                            type="text"
-                                            bordered
-                                            labelPlaceholder="Organization's Address"
-                                            color="primary"
-                                            required={true}
-                                            width="25rem"
-                                            value={removeAuthAddress}
-                                            onChange={e => setRemoveAuthAddress(e.target.value)}
+                                            <Input
+                                                clearable
+                                                type="text"
+                                                bordered
+                                                labelPlaceholder="Organization's Address"
+                                                color="primary"
+                                                required={true}
+                                                width="25rem"
+                                                value={removeAuthAddress}
+                                                onChange={e => setRemoveAuthAddress(e.target.value)}
 
-                                        />
+                                            />
 
-                                        <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }}>Click Here  </Button>
-                                    </div>
-
-
-                                </form>
+                                            <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }}>Click Here  </Button>
+                                        </div>
 
 
-
-                            </div>
-                            <Text h4 css={{ marginBottom: "2rem", marginTop: "2rem" }}>OR</Text>
-                            <div>
-                                <form onSubmit={handleRemoveAuthId}>
-                                    <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
-                                        <Input
-                                            clearable
-                                            type="text"
-                                            bordered
-                                            labelPlaceholder="Organization's  Id"
-                                            color="primary"
-                                            required={true}
-                                            width="25rem"
-                                            value={removeAuthId}
-                                            onChange={e => setRemoveAuthId(e.target.value)}
-
-                                        />
-
-                                        <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }}>Click Here  </Button>
-                                    </div>
+                                    </form>
 
 
-                                </form>
+
+                                </div>
+                                <div> <Text h4 >OR</Text></div>
+                                <div>
+                                    <form onSubmit={handleRemoveAuthId}>
+                                        <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+                                            <Input
+                                                clearable
+                                                type="text"
+                                                bordered
+                                                labelPlaceholder="Organization's  Id"
+                                                color="primary"
+                                                required={true}
+                                                width="25rem"
+                                                value={removeAuthId}
+                                                onChange={e => setRemoveAuthId(e.target.value)}
+
+                                            />
+
+                                            <Button type='submit' shadow auto color="primary" rounded css={{ zIndex: "1" }}>Click Here  </Button>
+                                        </div>
+
+
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div >
             </section >
         </>
     )

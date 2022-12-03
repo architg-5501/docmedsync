@@ -13,10 +13,9 @@ import {
 
 import Owner from './pages/dashboard/Owner/Owner';
 
-import PublicDashBoard from './pages/dashboard/Public/Public';
-import Admin from './pages/dashboard/Admin/admin';
-import Hospital from './pages/dashboard/Hospital/Hospital';
-import PatientDashboard from './pages/dashboard/Patient/Patient';
+
+import HospitalsTable from './pages/dashboard/Public/HospitalsTable';
+import About from './pages/about/about';
 
 const lightTheme = createTheme({
   type: 'light'
@@ -41,14 +40,8 @@ function App() {
       <Routes>
 
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/dashboard" element={<Dashboard />} >
-          <Route path="owner" element={<Owner />} />
-          <Route path="public" element={<PublicDashBoard />} />
-          <Route path="admin" element={<Admin />} />
-          <Route path="hospital" element={<Hospital />} />
-          <Route path="patient" element={<PatientDashboard />} />
-        </Route>
-        <Route exact path="/about" element={<Hospital />} />
+        <Route exact path="/dashboard/*" element={<Dashboard />} />
+        <Route exact path="/about" element={<About/>} />
 
 
       </Routes>

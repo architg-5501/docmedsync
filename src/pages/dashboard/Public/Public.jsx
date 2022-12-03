@@ -17,6 +17,7 @@ const PublicDashBoard = () => {
     const [isAdmin, setIsAdmin] = useState("");
     const [hospitalId, setHospitalId] = useState("");
     const [hospital, setHospital] = useState(null);
+    const [hospitals, setHospitals] = useState([]);
     const [orgId, setOrgId] = useState("");
     const [org, setOrg] = useState(null);
 
@@ -79,9 +80,32 @@ const PublicDashBoard = () => {
     const getHospital = async (e) => {
         e.preventDefault();
         try {
+            
             const hos = await contract.methods.getHospitalById(hospitalId).call();
             setHospital(hos);
-            console.log(hos);
+         
+        } catch (error) {
+            console.log(error)
+            window.alert("Could not get details of hospital. Please check Hospial Id")
+        }
+        setHospitalId("");
+    }
+
+    const getHospitals = async (e) => {
+        try {
+            
+            const currHosId = await contract.methods.hospitalId().call({ from: accounts[0] });
+            const hos_list = [];
+            for (let i = 1; i <= (currHosId - 1); i++) {
+                const hos = await contract.methods.getHospitalById(i).call();
+                hos_list.push(hos);
+                
+            }
+            setHospitals(hos_list);
+            console.log(hos_list);
+            history("hospitals",{state:{data:hos_list}});
+            
+            
         } catch (error) {
             console.log(error)
             window.alert("Could not get details of hospital. Please check Hospial Id")
@@ -199,9 +223,10 @@ const PublicDashBoard = () => {
 
                                 />
                                 <Button type='submit' shadow auto color="primary" rounded>Click Here </Button>
+                                <Button  shadow auto color="primary" onPress={getHospitals} >View All</Button>
                             </div>
                         </form>
-
+             
                         <div className="details">
                             {!hospital
                                 ? <></>

@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import Patient from '../../../Components/Patient/Patient';
-import Record from '../../../Components/Record/Record';
-import "./Auth.css";
+import Patient from '../../../components/Patient/Patient';
+import Record from '../../../components/Record/Record';
+//import "./Auth.css";
 import { getWeb3 } from "../../../utils.js";
-import DMed from "../../../contracts/DMed.json";
-import Loading from '../../../Components/Loading/Loading';
-import { useHistory } from 'react-router-dom';
+import Docmedsync from "../../../contracts/Docmedsync.json";
+import Loading from '../../../components/Loading/Loading';
+import { useNavigate } from 'react-router-dom';
+import { Input, Button, Text } from "@nextui-org/react";
+import { message, ConfigProvider, theme } from 'antd';
+import useDarkMode from 'use-dark-mode';
 
 const Auth = () => {
 
     const [web3, setWeb3] = useState(undefined);
     const [accounts, setAccounts] = useState(undefined);
     const [contract, setContract] = useState(undefined);
-    const history = useHistory();
+    const history = useNavigate();
     const [patientId, setPatientId] = useState("");
     const [patientIdRec, setPatientIdRec] = useState("");
     const [patient, setPatient] = useState(null);
     const [records, setRecords] = useState([]);
+
+    const darkMode = useDarkMode(false);
+    const [messageApi, contextHolder] = message.useMessage();
 
     const isReady = () => {
         return (
@@ -32,11 +38,11 @@ const Auth = () => {
                 const web3 = await getWeb3();
                 const accounts = await web3.eth.getAccounts();
                 const networkId = await web3.eth.net.getId();
-                const deployedNetwork = DMed.networks[networkId];
-                if(deployedNetwork === undefined)
-                    throw new Error('Make sure you are on the corrent network. Set the network to Ropsten Test Network');
+                const deployedNetwork = Docmedsync.networks[networkId];
+                if (deployedNetwork === undefined)
+                    throw new Error('Make sure you are on the corret network. Set the network to Ropsten Test Network');
                 const contract = new web3.eth.Contract(
-                    DMed.abi,
+                    Docmedsync.abi,
                     deployedNetwork && deployedNetwork.address,
                 );
 
@@ -45,7 +51,7 @@ const Auth = () => {
                 setContract(contract);
             } catch (error) {
                 window.alert(error);
-                history.push("/dashboard");
+                history("/dashboard");
             }
         }
         init();
@@ -99,26 +105,39 @@ const Auth = () => {
             <section className="auth-dash-wrapper">
                 <div className="container">
                     <div className="section-title">
-                        <h2>Authorized Dashboard</h2>
-                        <p>
-                            Various operations an authorized person can do.
-                        </p>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <Text color="primary" h2>Authorized Dashboard</Text>
+                            <Text >Various operations an authorized person can do.</Text>
+
+                        </div>
                     </div>
 
-                    <div className="get-details-patient">
-                        <h4>
-                            Get Details of Patient
-                        </h4>
+                    <div className="get-details-patient" style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        marginLeft: "8rem",
+                        marginTop: "4rem",
+                        marginBottom: "2rem"
+                    }}>
+                        <Text color='primary' h4 css={{ marginBottom: "2rem" }}> Get details of Patient</Text>
                         <div>
                             <form onSubmit={getPatient}>
-                                <div className="row">
-                                    <div className="col-md-4 form-group py-1">
-                                        <input type="number" name="id" className="form-control" id="paitnet-id" placeholder="Patient's Id" required value={patientId}
-                                            onChange={e => setPatientId(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-4 form-group mt-3 mt-md-0 py-1">
-                                        <button type="submit">Click Here</button>
-                                    </div>
+                                <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+
+                                    <Input
+                                        clearable
+                                        type="text"
+                                        bordered
+                                        labelPlaceholder="Patient's Id"
+                                        color="primary"
+                                        required={true}
+                                        width='400px'
+                                        value={patientId}
+                                        onChange={e => setPatientId(e.target.value)}
+
+                                    />
+                                    <Button type='submit' shadow auto color="primary" rounded>Click Here </Button>
                                 </div>
                             </form>
                             {!patient
@@ -127,19 +146,32 @@ const Auth = () => {
                         </div>
                     </div>
 
-                    <div className="get-details">
-                        <h4>
-                            Get Records of Patient
-                        </h4>
+                    <div className="get-records" style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        marginLeft: "8rem",
+                        marginTop: "4rem",
+                        marginBottom: "2rem"
+                    }}>
+                        <Text color='primary' h4 css={{ marginBottom: "2rem" }}>Get Records of Patient</Text>
                         <div>
                             <form onSubmit={getRecords}>
-                                <div className="row">
-                                    <div className="col-md-4 form-group py-1">
-                                        <input type="number" name="address" className="form-control" id="patient-id" placeholder="Patient's Id" required value={patientIdRec} onChange={e => setPatientIdRec(e.target.value)} />
-                                    </div>
-                                    <div className="col-md-4 form-group mt-3 mt-md-0 py-1">
-                                        <button type="submit">Click Here</button>
-                                    </div>
+                                <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
+
+                                    <Input
+                                        clearable
+                                        type="text"
+                                        bordered
+                                        labelPlaceholder="Patient's Id"
+                                        color="primary"
+                                        required={true}
+                                        width='400px'
+                                        value={patientIdRec}
+                                        onChange={e => setPatientIdRec(e.target.value)}
+
+                                    />
+                                    <Button type='submit' shadow auto color="primary" rounded>Click Here </Button>
                                 </div>
                             </form>
                             {records.length > 0

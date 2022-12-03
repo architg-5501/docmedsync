@@ -4,8 +4,6 @@ pragma experimental ABIEncoderV2;
 
 import {Ownable} from "./Ownable.sol";
 
-
-
 contract Docmedsync is Ownable {
     struct Hospital {
         uint256 id;
@@ -209,7 +207,10 @@ contract Docmedsync is Ownable {
         string memory _profilePicture,
         address _walletAddress
     ) public onlyHospital {
-        require(patients[_id].id == 0 && patientToId[_walletAddress] == 0 , "Patient already exists");
+        require(
+            patients[_id].id == 0 && patientToId[_walletAddress] == 0,
+            "Patient already exists"
+        );
         uint256[] memory _records;
         patientToId[_walletAddress] = _id;
         patients[_id] = Patient(
@@ -421,6 +422,26 @@ contract Docmedsync is Ownable {
         }
 
         return (hosId, cond, desc, aller, docs);
+    }
+
+    function getHospitals()
+        public
+        view
+        returns (
+            uint256[] memory,
+            string[] memory,
+            string[] memory,
+            string[] memory
+        )
+            
+    {
+        //uint256 len = hospitals.length;
+        //uint256[] memory hosId = new uint256[](len);
+        //string[] memory name = new string[](len);
+        //string[] memory add = new string[](len);
+        //string[] memory license = new string[](len);
+        //return (hosId,name,add,license);
+        
     }
 
     modifier onlyAuthorised(uint256 _id) {

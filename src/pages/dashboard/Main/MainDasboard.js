@@ -35,7 +35,7 @@ export default function MainDasboard() {
         {
             title: "Authorized",
             desc: "These funtions are for the authorized organization only. Make sure that you have the correct access rights before you enter.",
-            link: "/dashboard",
+            link: "/dashboard/auth",
             icon: shieldKey
         },
         {

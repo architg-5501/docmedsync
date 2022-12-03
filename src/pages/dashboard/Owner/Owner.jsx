@@ -61,11 +61,17 @@ const Owner = () => {
     const AddAdmin = async (e) => {
         e.preventDefault();
         try {
-            console.log(addAdmin);
+            messageApi.open({
+                key:"1",
+                type: 'loading',
+                content: 'Transaction in progress...',
+                duration: 0,
+              });
 
             await contract.methods.addAdmin(addAdmin.trim()).send({ from: accounts[0] });
 
             messageApi.open({
+                key:"1",
                 type: 'success',
                 content: <>Admin added successfully!</>,
                 duration: 5,
@@ -73,6 +79,7 @@ const Owner = () => {
         } catch (error) {
 
             messageApi.open({
+                key:"1",
                 type: 'error',
                 content: <> Admin could not be added. Make sure you are the Owner and check the entered Address.</>,
                 duration: 5,
@@ -87,8 +94,15 @@ const Owner = () => {
     const RemoveAdmin = async (e) => {
         e.preventDefault();
         try {
+            messageApi.open({
+                key:"2",
+                type: 'loading',
+                content: 'Transaction in progress...',
+                duration: 0,
+              });
             await contract.methods.removeAdmin(removeAdmin.trim()).send({ from: accounts[0] });
             messageApi.open({
+                key:"2",
                 type: 'success',
                 content: <>Admin removed successfully!</>,
                 duration: 5,
@@ -96,6 +110,7 @@ const Owner = () => {
             //window.alert("Admin removed successfully");
         } catch (error) {
             messageApi.open({
+                key:"2",
                 type: 'error',
                 content: <> Admin could not be removed. Make sure you are the Owner and check the entered Address.</>,
                 duration: 5,
@@ -111,8 +126,15 @@ const Owner = () => {
         e.preventDefault();
 
         try {
+            messageApi.open({
+                key:"3",
+                type: 'loading',
+                content: 'Transaction in progress...',
+                duration: 0,
+              });
             await contract.methods.changeOwner(transferOwnership.trim()).send({ from: accounts[0] });
             messageApi.open({
+                key:"3",
                 type: 'success',
                 content: <>Owner changed successfully!</>,
                 duration: 5,
@@ -120,6 +142,7 @@ const Owner = () => {
             //window.alert("Owner changed successfully");
         } catch (error) {
             messageApi.open({
+                key:"3",
                 type: 'error',
                 content: <> Ownership could not be transferred. Make sure you are the Owner and check the entered Address.</>,
                 duration: 5,

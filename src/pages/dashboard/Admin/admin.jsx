@@ -4,7 +4,7 @@ import Docmedsync from "../../../contracts/Docmedsync.json";
 import Loading from '../../../components/Loading/Loading';
 import { useNavigate } from 'react-router-dom';
 import { create } from "ipfs-http-client";
-import { Input, Button, Text } from "@nextui-org/react";
+import { Input, Button, Text,Badge } from "@nextui-org/react";
 import { message, ConfigProvider, theme } from 'antd';
 import useDarkMode from 'use-dark-mode';
 var Buffer = require('buffer/').Buffer
@@ -32,6 +32,7 @@ const Admin = () => {
     const inputRef = useRef(null);
     const darkMode = useDarkMode(false);
     const [messageApi, contextHolder] = message.useMessage();
+    const [loading, setLoading] = useState(false);
     const isReady = () => {
         return (
             typeof contract !== 'undefined'
@@ -129,19 +130,27 @@ const Admin = () => {
     const handleSubmitHospital = async (e) => {
         e.preventDefault();
         try {
-          
+            messageApi.open({
+                key:"1",
+                type: 'loading',
+                content: 'Transaction in progress...',
+                duration: 0,
+              });
+            setLoading(true);
             const result = await ipfs.add(hospitalBuffer);
-            console.log(result.path);
+          
             await contract.methods.addHospital(hospital.name, hospital.address, hospital.ethAdd.trim(), result.path).send({ from: accounts[0] });
             await updateIds();
             messageApi.open({
+                key:"1",
                 type: 'success',
-                content: <>Hospital Registered Successfully</>,
+                content: <>Hospital Registered Successfully!</>,
                 duration: 5,
             });
             
         } catch (error) {
             messageApi.open({
+                key:"1",
                 type: 'error',
                 content: <>Hospital could not be added. Make sure you are an admin and check input fields</>,
                 duration: 5,
@@ -149,24 +158,35 @@ const Admin = () => {
             
             console.error(error);
         }
+        
+        setLoading(false);
         setHospital({ name: "", address: "", ethAdd: "" });
     }
 
     const handleSubmitOrg = async (e) => {
         e.preventDefault();
         try {
+
+            messageApi.open({
+                key:"2",
+                type: 'loading',
+                content: 'Transaction in progress...',
+                duration: 0,
+              });
             const result = await ipfs.add(orgBuffer);
           
             await contract.methods.addOrganization(org.name, org.ethAdd.trim(), result.path).send({ from: accounts[0] });
             await updateIds();
             messageApi.open({
+                key:"2",
                 type: 'success',
-                content: <>Organization Registered Successfully</>,
+                content: <>Organization Registered Successfully!</>,
                 duration: 5,
             });
             //window.alert("Organization Registered Successfully");
         } catch (error) {
             messageApi.open({
+                key:"2",
                 type: 'error',
                 content: <>Organization Could not be added. Make sure you are an admin and check input fields</>,
                 duration: 5,
@@ -208,8 +228,8 @@ const Admin = () => {
                             marginTop: "4%",
                             marginBottom: "2%"
                         }}>
-                        <Text h4 css={{ marginBottom: "2rem" }}>Add new hosptial</Text>
-                        <Text h6 css={{ marginBottom: "2rem" }}>{`Current Id : ${currentHospitalId}`}</Text>
+                        <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Add new Hosptial</Text>
+                        <Badge variant="flat" color="warning" size="md" css={{ marginBottom: "2rem" }}>{`Current Id : ${currentHospitalId}`}</Badge>
                         <form onSubmit={handleSubmitHospital} >
 
                             <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
@@ -292,8 +312,9 @@ const Admin = () => {
                             marginTop: "4%",
                             marginBottom: "2%"
                         }}>
-                        <Text h4 css={{ marginBottom: "2rem" }}>Add new Organisation</Text>
-                        <Text h6 css={{ marginBottom: "2rem" }}> {`Current Id : ${currentOrgId}`}</Text>
+                        <Text h4 color="primary" css={{ marginBottom: "2rem" }}>Add new Organisation</Text>
+                        <Badge variant="flat" color="warning" size="md" css={{ marginBottom: "2rem" }}>{`Current Id : ${currentOrgId}`}</Badge>
+                     
                         <form onSubmit={handleSubmitOrg} >
 
                             <div style={{ display: "flex", flexDirection: "row", justifyItems: "center", gap: "2rem" }}>
