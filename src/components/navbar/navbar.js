@@ -79,7 +79,7 @@ export const Nav = () => {
                             minWidth: '100%',
                         }}
                         target="_blank"
-                        href="https://github.com/SahilJaiman/docmedsync"
+                        href="https://github.com/architg-5501/docmedsync"
                     >
                         <GithubIcon />
                     </Link>
@@ -104,7 +104,7 @@ export const Nav = () => {
                             minWidth: '100%',
                         }}
                         target="_blank"
-                        href="https://github.com/SahilJaiman/docmedsync"
+                        href="https://github.com/architg-5501/docmedsync"
                     >
                         <GithubIcon />
                     </Link>
