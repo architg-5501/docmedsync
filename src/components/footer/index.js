@@ -18,12 +18,10 @@ const Footer = () => {
                 </div>
                 <div className="copy-right">
                     <div className="icons-container">
-                        <a href="https://github.com/SahilJaiman/docmedsync" target="_blank" rel="noreferrer">
+                        <a href="https://github.com/architg-5501/docmedsync" target="_blank" rel="noreferrer">
                             <Icon icon={githubFill} color="#455383" />
                         </a>
-                        <a href="https://www.linkedin.com/in/sahil-jaiman-602abb113/" target="_blank" rel="noreferrer">
-                            <Icon icon={linkedinIcon} color="#455383" />
-                        </a>
+                       
                         <a href="https://discord.com/" target="_parent">
                             <Icon icon={discordFill} color="#455383" />
                         </a>
